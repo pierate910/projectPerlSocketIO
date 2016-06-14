@@ -1,0 +1,32 @@
+
+use IO::Socket;
+#####################################
+# Client Script:
+# Copyright 2003 (c) Philip Yuson
+# this program is distributed according to
+# the terms of the Perl license
+# Use at your own risk
+#####################################
+$remote = IO::Socket::INET->new(
+                Proto   => 'tcp',       # protocol
+                PeerAddr=> 'localhost', # Address of server
+                PeerPort=> "8081",      # port of server
+                Reuse   => 1,
+                ) or die "$!";
+print "Connected to ", $remote->peerhost, # Info message
+      " on port: ", $remote->peerport, "\n";
+$remote->autoflush(1);  # Send immediately
+while (<>) {    # Get input from STDIN
+        print $remote $_;       # Send to Server
+        last if m/^end/gi;      # If 'end' then exit loop
+        my $line = <$remote>;   # Receive echo from server
+        if ($line ne $_) {      # If not the same as input
+                print "Error in sending output\n"; # error
+                exit;           # Terminate
+        }
+}
+my $res = <$remote>;            # Receive result from server
+$res =~ m/result=(\d*)/gi;      # Get the numeric result from message
+print "Result: $1\n";           # Print the result
+print "End of client\n";        # End of client
+close $remote;                  # Close socket
