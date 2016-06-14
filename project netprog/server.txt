@@ -1,11 +1,5 @@
 use IO::Socket;
-#####################################
-# Server Script: 
-# Copyright 2003 (c) Philip Yuson 
-# this program is distributed according to 
-# the terms of the Perl license
-# Use at your own risk
-#####################################
+
 $local = IO::Socket::INET->new(
                 Proto     => 'tcp',             # protocol
                 LocalAddr => 'localhost:8081',  
